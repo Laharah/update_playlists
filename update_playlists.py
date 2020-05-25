@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Copy m3u(8) playlists and update the track paths."""
 import shutil
 import re
 from pathlib import Path, PurePath, PureWindowsPath
@@ -11,7 +13,7 @@ def main(playlist_dir, output_dir, replace=None, overwrite=False):
     for playlist in playlist_dir.rglob('*.m3u*'):
         dest = playlist.relative_to(playlist_dir)
         dest = output_dir / dest
-        if not overwrite and dest.exists(): 
+        if not overwrite and dest.exists():
             print(f'{dest} already exists, skipping.')
             continue
         dest.parent.mkdir(parents=True, exist_ok=True)
@@ -30,14 +32,20 @@ def main(playlist_dir, output_dir, replace=None, overwrite=False):
 
 if __name__ == '__main__':
     import argparse
-    parser = argparse.ArgumentParser('update_playlists')
-    parser.add_argument('playlist_dir', type=Path)
-    parser.add_argument('output_dir', type=Path)
+    parser = argparse.ArgumentParser('update_playlists', description=__doc__)
+    parser.add_argument('playlist_dir', type=Path, help='Path to read m3u files from.')
+    parser.add_argument('output_dir', type=Path, help='Path to write m3u files to.')
     parser.add_argument('-m',
                         '--replace_music_dir',
                         dest='replace',
                         nargs=2,
-                        type=PurePath)
-    parser.add_argument('-f', '--overwrite', dest='overwrite', action='store_true')
+                        type=PurePath,
+                        help='Replace OLDMUSICDIR with LOCALMUSICDIR on each track.',
+                        metavar=('OLDMUSICDIR', 'LOCALMUSICDIR'))
+    parser.add_argument('-f',
+                        '--overwrite',
+                        dest='overwrite',
+                        action='store_true',
+                        help='Overwrite exsisting playlists.')
     options = parser.parse_args()
     main(**vars(options))
