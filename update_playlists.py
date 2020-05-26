@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Copy m3u(8) playlists and update the track paths."""
-import shutil
 import re
 from pathlib import Path, PurePath, PureWindowsPath
 
