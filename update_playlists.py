@@ -23,7 +23,7 @@ def main(playlist_dir, output_dir, replace=None, overwrite=False, update_only=Fa
         with open(playlist) as fin, open(dest, 'wb') as fout:
             for track in fin:
                 track = track.strip()
-                if re.match(r'\w:', track):
+                if re.match(r'\w:', track) or '\\' in track:
                     track = PureWindowsPath(track)
                 else:
                     track = Path(track)
