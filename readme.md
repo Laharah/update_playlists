@@ -30,6 +30,6 @@ optional arguments:
   -h, --help            show this help message and exit
   -m OLDMUSICDIR LOCALMUSICDIR, --replace_music_dir OLDMUSICDIR LOCALMUSICDIR
                         Replace OLDMUSICDIR with LOCALMUSICDIR on each track.
-  -f, --overwrite       Overwrite exsisting playlists.
+  -f, --overwrite       Overwrite existing playlists.
   -u, --update_only     Overwrite only if source is newer than destination.
 ```

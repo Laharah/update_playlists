@@ -50,7 +50,7 @@ if __name__ == '__main__':
                             '--overwrite',
                             dest='overwrite',
                             action='store_true',
-                            help='Overwrite exsisting playlists.')
+                            help='Overwrite existing playlists.')
     overwrites.add_argument('-u',
                             '--update_only',
                             dest='update_only',
