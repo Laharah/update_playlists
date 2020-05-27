@@ -4,7 +4,7 @@ import re
 from pathlib import Path, PurePath, PureWindowsPath
 
 
-def main(playlist_dir, output_dir, replace=None, overwrite=False):
+def main(playlist_dir, output_dir, replace=None, overwrite=False, update_only=False):
     if replace:
         old_m_dir, new_m_dir = replace
         if '\\' in str(old_m_dir) or re.match(r'\w:', str(old_m_dir)):
@@ -12,9 +12,13 @@ def main(playlist_dir, output_dir, replace=None, overwrite=False):
     for playlist in playlist_dir.rglob('*.m3u*'):
         dest = playlist.relative_to(playlist_dir)
         dest = output_dir / dest
-        if not overwrite and dest.exists():
+        if not (overwrite or update_only) and dest.exists():
             print(f'{dest} already exists, skipping.')
             continue
+        if (update_only and dest.exists()
+                and dest.stat().st_mtime > playlist.stat().st_mtime):
+            continue
+
         dest.parent.mkdir(parents=True, exist_ok=True)
         with open(playlist) as fin, open(dest, 'wb') as fout:
             for track in fin:
@@ -41,10 +45,16 @@ if __name__ == '__main__':
                         type=PurePath,
                         help='Replace OLDMUSICDIR with LOCALMUSICDIR on each track.',
                         metavar=('OLDMUSICDIR', 'LOCALMUSICDIR'))
-    parser.add_argument('-f',
-                        '--overwrite',
-                        dest='overwrite',
-                        action='store_true',
-                        help='Overwrite exsisting playlists.')
+    overwrites = parser.add_mutually_exclusive_group()
+    overwrites.add_argument('-f',
+                            '--overwrite',
+                            dest='overwrite',
+                            action='store_true',
+                            help='Overwrite exsisting playlists.')
+    overwrites.add_argument('-u',
+                            '--update_only',
+                            dest='update_only',
+                            action='store_true',
+                            help='Overwrite only if source is newer than destination.')
     options = parser.parse_args()
     main(**vars(options))

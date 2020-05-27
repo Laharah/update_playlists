@@ -17,7 +17,7 @@ $> chmod +x /usr/local/bin/update_playlists
 
 ## Usage
 ```
-usage: update_playlists [-h] [-m OLDMUSICDIR LOCALMUSICDIR] [-f]
+usage: update_playlists [-h] [-m OLDMUSICDIR LOCALMUSICDIR] [-f | -u]
                         playlist_dir output_dir
 
 Copy m3u(8) playlists and update the track paths.
@@ -31,4 +31,5 @@ optional arguments:
   -m OLDMUSICDIR LOCALMUSICDIR, --replace_music_dir OLDMUSICDIR LOCALMUSICDIR
                         Replace OLDMUSICDIR with LOCALMUSICDIR on each track.
   -f, --overwrite       Overwrite exsisting playlists.
+  -u, --update_only     Overwrite only if source is newer than destination.
 ```
